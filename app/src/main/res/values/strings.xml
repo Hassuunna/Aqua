@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">AquaValley0.0</string>
+    <string name="device_name_goes_here">Device Name goes here</string>
+    <string name="message_goes_here">Message goes here</string>
+    <string name="get_device_name">Get Device Name</string>
+    <string name="send_device_name">Send Device Name</string>
+    <string name="starting_server_info">starting server...</string>
+    <string name="receiving_info">i\'m receiving here</string>
+</resources>
