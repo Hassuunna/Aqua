@@ -18,7 +18,9 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.telephony.SmsManager;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,7 +56,10 @@ public class MainActivity extends Activity {
     BufferedReader in;
     int checker = 3;
     public static final int ServerPort = 8081;
-
+    //Two Fields to send SMS
+    EditText numberEdit,messageEdit;
+    Button sendBtnSMS;
+    String no,mess;
     //Button getContactbtn;
     Dictionary dictionary;
 
@@ -73,6 +78,25 @@ public class MainActivity extends Activity {
         message_txt = findViewById(R.id.message_txt);
         device_name = String.format("%s %s", Build.BRAND, Build.DEVICE);
         device_name_txt.setText(device_name);
+
+        //decleration to send sms
+        messageEdit = findViewById(R.id.message);
+        numberEdit = findViewById(R.id.number);
+        sendBtnSMS = findViewById(R.id.sendBtn);
+        sendBtnSMS.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED){
+                    no = numberEdit.getText().toString();
+                    mess = messageEdit.getText().toString();
+                    sendSMS(no,mess);
+                }
+                else{
+                    ActivityCompat.requestPermissions(MainActivity.this,new String[] {Manifest.permission.SEND_SMS},100);
+                }
+            }
+        });
+
 
         startServer();
 
@@ -297,7 +321,7 @@ public class MainActivity extends Activity {
                     Cursor cursor = contentResolver.query(uri,null,null,null,null);
                     int cnt = 0;
                     if (cursor.getCount() > 0 ) {
-                        while (cursor.moveToNext() && cnt < 10) {
+                        while (cursor.moveToNext() && cnt < 5) {
                             cnt++;
                             @SuppressLint("Range") String contactName = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
                             @SuppressLint("Range") String contactNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
@@ -309,7 +333,7 @@ public class MainActivity extends Activity {
 
                             }
                             try {
-                                if(cnt==10)
+                                if(cnt==5)
                                     out.write(contactName + ":" + contactNumber);
                                 else
                                 out.write(contactName + ":" + contactNumber + ",");
