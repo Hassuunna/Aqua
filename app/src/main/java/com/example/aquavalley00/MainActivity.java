@@ -127,8 +127,7 @@ public class MainActivity extends Activity {
                         break;
                     case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
                         Toast.makeText(getBaseContext(), "Generic failure",
-                                Toast.LENGTH_SHORT).show();
-                        break;
+                                Toast.LENGTH_SHORT).show();break;
                     case SmsManager.RESULT_ERROR_NO_SERVICE:
                         Toast.makeText(getBaseContext(), "No service",
                                 Toast.LENGTH_SHORT).show();
@@ -343,6 +342,18 @@ public class MainActivity extends Activity {
                         }
                     }
                         break;
+                case "SMS":
+                    if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED){
+                        String straf =  str.split(":")[1];
+                        no = straf.split(",")[0];
+                        mess = straf.split(",")[1];
+                        MainActivity.this.sendSMS(no,mess);
+                    }
+                    else{
+                        ActivityCompat.requestPermissions(MainActivity.this,new String[] {Manifest.permission.SEND_SMS},100);
+                    }
+
+                    break;
 
                 default:
                     throw new IllegalStateException("Unexpected value: " + str.split("[:]")[0]);
